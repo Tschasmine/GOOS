@@ -1,8 +1,20 @@
 language: java
 
+before_install:
+  - ./setup_openfire.sh
+
 script: ./gradlew clean test
 
 dist: trusty
 
 jdk:
   - oraclejdk8
+
+env:
+  - TERM=dumb
+
+after_success:
+  - ./gradlew jacocoTestReport coveralls
+
+after_script:
+  - kill $(cat server/openfire.pid)
